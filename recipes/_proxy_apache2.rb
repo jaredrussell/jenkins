@@ -59,7 +59,8 @@ template "#{node['apache']['dir']}/sites-available/jenkins" do
     :www_redirect     => www_redirect,
     :redirect_http    => node['jenkins']['http_proxy']['ssl']['redirect_http'],
     :ssl_enabled      => node['jenkins']['http_proxy']['ssl']['enabled'],
-    :ssl_listen_ports => node['jenkins']['http_proxy']['ssl']['ssl_listen_ports']
+    :ssl_listen_ports => node['jenkins']['http_proxy']['ssl']['ssl_listen_ports'],
+    :jenkins_port     => node['jenkins']['server']['port']
   )
 
   if File.exists?("#{node['apache']['dir']}/sites-enabled/jenkins")
