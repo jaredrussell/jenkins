@@ -25,7 +25,7 @@
 version = node['jenkins']['server']['version']
 
 if version.nil?
-  Chef::Application.fatal!("Jenkins version number must be specified when installing on Windows")
+  Chef::Application.fatal!('Jenkins version number must be specified when installing on Windows')
 end
 
 home_dir = node['jenkins']['server']['home']
@@ -37,7 +37,7 @@ remote_file zip_path do
   checksum node['jenkins']['server']['package_checksum']
 end
 
-extract_path = File.join(Chef::Config[:file_cache_path], File.basename(url, ".*"))
+extract_path = File.join(Chef::Config[:file_cache_path], File.basename(url, '.*'))
 
 windows_zipfile extract_path do
   source zip_path

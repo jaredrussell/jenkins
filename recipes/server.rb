@@ -25,7 +25,7 @@
 # limitations under the License.
 #
 
-unless platform_family?("windows")
+unless platform_family?('windows')
 
   include_recipe 'java::default'
 
@@ -90,7 +90,7 @@ end
 ruby_block 'block_until_operational' do
   block do
     Chef::Log.info "Waiting until Jenkins is listening on port #{node['jenkins']['server']['port']}"
-    until JenkinsHelper.service_listening?(node['jenkins']['server']['port'], platform_family?("windows"))
+    until JenkinsHelper.service_listening?(node['jenkins']['server']['port'], platform_family?('windows'))
       sleep 1
       Chef::Log.debug('.')
     end
