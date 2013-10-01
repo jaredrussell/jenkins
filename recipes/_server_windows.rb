@@ -50,12 +50,6 @@ windows_package "Jenkins #{version}" do
   options "JENKINSDIR=\"#{home_dir}\""
 end
 
-template "#{home_dir}/jenkins.xml" do
-  source 'jenkins.xml.erb'
-  variables(:http_port => node['jenkins']['server']['port'])
-  notifies :restart, 'service[jenkins]'
-end
-
 service_name = 'Jenkins'
 service_account = node['jenkins']['server']['service_user']
 #
@@ -85,6 +79,13 @@ execute service_cred_command do
   end
 
   notifies :restart, 'service[jenkins]', :immediately
+  notifies :create, 'ruby_block[block_until_operational]', :immediately
+end
+
+template "#{home_dir}/jenkins.xml" do
+  source 'jenkins.xml.erb'
+  notifies :restart, 'service[jenkins]', :immediately
+  notifies :create, 'ruby_block[block_until_operational]', :immediately
 end
 
 service 'jenkins' do
