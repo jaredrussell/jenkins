@@ -22,22 +22,33 @@
 # limitations under the License.
 #
 
-default['jenkins']['server']['home'] = '/var/lib/jenkins'
-default['jenkins']['server']['log_dir'] = '/var/log/jenkins'
-
 default['jenkins']['server']['user'] = 'jenkins'
 case node['platform_family']
 when 'debian'
+  default['jenkins']['server']['home'] = '/var/lib/jenkins'
+  default['jenkins']['server']['log_dir'] = '/var/log/jenkins'
   default['jenkins']['server']['install_method'] = 'package'
   default['jenkins']['server']['group'] = 'nogroup'
   default['jenkins']['server']['config_path'] = '/etc/default/jenkins'
   default['jenkins']['server']['config_template'] = 'default.erb'
 when 'rhel'
+  default['jenkins']['server']['home'] = '/var/lib/jenkins'
+  default['jenkins']['server']['log_dir'] = '/var/log/jenkins'
   default['jenkins']['server']['install_method'] = 'package'
   default['jenkins']['server']['group'] = default['jenkins']['server']['user']
   default['jenkins']['server']['config_path'] = '/etc/sysconfig/jenkins'
   default['jenkins']['server']['config_template'] = 'sysconfig.erb'
+when 'windows'
+  default['jenkins']['server']['home'] = "C:\\Program Files (x86)\\Jenkins"
+  default['jenkins']['server']['install_method'] = 'windows'
+  default['jenkins']['server']['package_url'] = "#{node['jenkins']['mirror']}/windows/jenkins-#{node['jenkins']['server']['version']}.zip"
+  default['jenkins']['server']['package_checksum'] = nil
+
+  default['jenkins']['server']['service_user'] = 'LocalSystem'
+  default['jenkins']['server']['service_user_password'] = nil
 else
+  default['jenkins']['server']['home'] = '/var/lib/jenkins'
+  default['jenkins']['server']['log_dir'] = '/var/log/jenkins'
   default['jenkins']['server']['install_method'] = 'war'
   default['jenkins']['server']['group'] = default['jenkins']['server']['user']
 end

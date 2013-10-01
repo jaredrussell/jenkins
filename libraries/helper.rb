@@ -26,12 +26,19 @@ require 'chef/rest'
 module JenkinsHelper
   extend Chef::Mixin::ShellOut
 
-  def self.service_listening?(port)
-    netstat_command = 'netstat -lnt'
+  def self.service_listening?(port, windows)
+    if windows
+      netstat_command = 'netstat -a'
+      column_index = 1
+    else
+      netstat_command = 'netstat -lnt'
+      column_index = 3
+    end
+
     cmd = shell_out!(netstat_command)
     Chef::Log.debug("`#{netstat_command}` returned: \n\n #{cmd.stdout}")
     cmd.stdout.each_line.select do |l|
-      l.split[3] =~ /#{port}/
+      l.split[column_index] =~ /#{port}/
     end.any?
   end
 

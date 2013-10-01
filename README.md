@@ -14,6 +14,7 @@ Chef 0.10.10+ and Ohai 6.10+ for platform_family use.
 
 * Ubuntu
 * RHEL/CentOS
+* Windows
 
 ### Node (Slave) Recipe
 
@@ -43,6 +44,8 @@ Attributes
 * `node['jenkins']['server']['plugins']` - Download the latest version of plugins in this Array, bypassing update center. The members of the Array can either be strings if the latest version desired OR a Hash of the form
 `{'name' => 'git', 'version' => '1.4.0'}` if a specific version is required.
 * `node['jenkins']['server']['jvm_options']` - Additional tuning parameters to pass the underlying JVM process.
+* `node['jenkins']['server']['package_url']` - The URL to download the Jenkins Windows installer from.
+* `node['jenkins']['server']['package_checksum']` - The checksum for the Jenkins Windows installer.
 * `node['jenkins']['http_proxy']['variant']` - use `nginx` or `apache2` to proxy traffic to jenkins backend (`nginx` by default)
 * `node['jenkins']['http_proxy']['www_redirect']` - add a redirect rule for 'www.*' URL requests ("disable" by default)
 * `node['jenkins']['http_proxy']['listen_ports']` - list of HTTP ports for the HTTP proxy to listen on ([80] by default).
@@ -86,10 +89,11 @@ Attributes
 Recipes
 -------
 ### server
-Creates all required directories, installs Jenkins and generates an ssh private key and stores the ssh public key in the `node['jenkins']['server']['pubkey']` attribute for use by the node recipes. The installation method is controlled by the `node['jenkins']['server']['install_method']` attribute. The following install methods are supported:
+Creates all required directories, installs Jenkins and on Linux generates an ssh private key and stores the ssh public key in the `node['jenkins']['server']['pubkey']` attribute for use by the node recipes. The installation method is controlled by the `node['jenkins']['server']['install_method']` attribute. The following install methods are supported:
 
 * __package__ - Installs Jenkins from the official jenkins-ci.org packages.
 * __war__ - Downloads the latest version of the Jenkins WAR file from http://jenkins-ci. The server process is configured to run as a runit service.
+* __windows__ - Installs Jenkins from the official jenkins-ci.org MSI installer.
 
 ### node
 The type of agent that is used to communicate with the slave is determined by the attribute `node['jenkins']['node']['agent_type']`. The following agent types are supported:
