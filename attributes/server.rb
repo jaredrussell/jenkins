@@ -39,7 +39,7 @@ when 'rhel'
   default['jenkins']['server']['config_path'] = '/etc/sysconfig/jenkins'
   default['jenkins']['server']['config_template'] = 'sysconfig.erb'
 when 'windows'
-  default['jenkins']['server']['home'] = "C:\\Program Files (x86)\\Jenkins"
+  default['jenkins']['server']['home'] = 'C:\\Program Files (x86)\\Jenkins'
   default['jenkins']['server']['install_method'] = 'windows'
   default['jenkins']['server']['package_url'] = "#{node['jenkins']['mirror']}/windows/jenkins-#{node['jenkins']['server']['version']}.zip"
   default['jenkins']['server']['package_checksum'] = nil

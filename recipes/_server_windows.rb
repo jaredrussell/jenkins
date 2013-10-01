@@ -25,7 +25,7 @@
 version = node['jenkins']['server']['version']
 
 if version.nil?
-  Chef::Application.fatal!("Jenkins version number must be specified when installing on Windows")
+  Chef::Application.fatal!('Jenkins version number must be specified when installing on Windows')
 end
 
 home_dir = node['jenkins']['server']['home']
@@ -37,7 +37,7 @@ remote_file zip_path do
   checksum node['jenkins']['server']['package_checksum']
 end
 
-extract_path = File.join(Chef::Config[:file_cache_path], File.basename(url, ".*"))
+extract_path = File.join(Chef::Config[:file_cache_path], File.basename(url, '.*'))
 
 windows_zipfile extract_path do
   source zip_path
@@ -48,13 +48,6 @@ windows_package "Jenkins #{version}" do
   source File.join(extract_path, "jenkins-#{version}.msi")
   installer_type :msi
   options "JENKINSDIR=\"#{home_dir}\""
-end
-
-template "#{home_dir}/jenkins.xml" do
-  source 'jenkins.xml.erb'
-  variables(:http_port => node['jenkins']['server']['port'],
-            :prefix => node['jenkins']['server']['prefix'])
-  notifies :restart, 'service[jenkins]'
 end
 
 service_name = 'Jenkins'
@@ -86,6 +79,15 @@ execute service_cred_command do
   end
 
   notifies :restart, 'service[jenkins]', :immediately
+  notifies :create, 'ruby_block[block_until_operational]', :immediately
+end
+
+template "#{home_dir}/jenkins.xml" do
+  source 'jenkins.xml.erb'
+  variables(:http_port => node['jenkins']['server']['port'],
+            :prefix => node['jenkins']['server']['prefix'])
+  notifies :restart, 'service[jenkins]', :immediately
+  notifies :create, 'ruby_block[block_until_operational]', :immediately
 end
 
 service 'jenkins' do
