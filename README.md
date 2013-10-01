@@ -40,6 +40,7 @@ Attributes
 * `node['jenkins']['server']['user']` - User the Jenkins server runs as.
 * `node['jenkins']['server']['group']` - Jenkins user primary group.
 * `node['jenkins']['server']['port']` - TCP port Jenkins server listens on.
+* `node['jenkins']['server']['prefix']` - The context-root to run the Jenkins application under (e.g. `/jenkins`), (`nil` by default).
 * `node['jenkins']['server']['url']` - Base URL of the Jenkins server.
 * `node['jenkins']['server']['plugins']` - Download the latest version of plugins in this Array, bypassing update center. The members of the Array can either be strings if the latest version desired OR a Hash of the form
 `{'name' => 'git', 'version' => '1.4.0'}` if a specific version is required.

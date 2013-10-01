@@ -52,7 +52,8 @@ end
 
 template "#{home_dir}/jenkins.xml" do
   source 'jenkins.xml.erb'
-  variables(:http_port => node['jenkins']['server']['port'])
+  variables(:http_port => node['jenkins']['server']['port'],
+            :prefix => node['jenkins']['server']['prefix']))
   notifies :restart, 'service[jenkins]'
 end
 

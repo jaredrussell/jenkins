@@ -119,6 +119,15 @@ suites:
           server_auth_method: basic
           basic_auth_username: foo
           basic_auth_password: bar
+  - name: server-prefix
+    run_list:
+    - recipe[jenkins::server]
+    - recipe[minitest-handler]
+    attributes:
+      jenkins:
+        server:
+          prefix: /jenkins
+          url: http://localhost:8080/jenkins
   - name: node
     run_list:
     - recipe[jenkins::server]
