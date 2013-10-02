@@ -94,8 +94,10 @@ private
     # to match Update Center's behavior.
     remote_file plugin_file_path do
       source plugin_url
-      owner node['jenkins']['server']['user']
-      group node['jenkins']['server']['group']
+      unless platform_family?('windows')
+        owner node['jenkins']['server']['user']
+        group node['jenkins']['server']['group']
+      end
       backup false
       action :create
       notifies :restart, 'service[jenkins]'
@@ -104,8 +106,10 @@ private
 
     file "#{plugin_file_path}.pinned" do
       action :create_if_missing
-      owner node['jenkins']['server']['user']
-      group node['jenkins']['server']['group']
+      unless platform_family?('windows')
+        owner node['jenkins']['server']['user']
+        group node['jenkins']['server']['group']
+      end
     end
   end
 

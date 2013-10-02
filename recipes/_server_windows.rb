@@ -78,14 +78,15 @@ execute service_cred_command do
     !service.nil? && service.startName != service_account
   end
 
-  notifies :restart, 'service[jenkins]', :immediately
-  notifies :create, 'ruby_block[block_until_operational]', :immediately
+  notifies :restart, 'service[jenkins]'
+  notifies :create, 'ruby_block[block_until_operational]'
 end
 
 template "#{home_dir}/jenkins.xml" do
   source 'jenkins.xml.erb'
-  notifies :restart, 'service[jenkins]', :immediately
-  notifies :create, 'ruby_block[block_until_operational]', :immediately
+  variables(:http_port => node['jenkins']['server']['port'])
+  notifies :restart, 'service[jenkins]'
+  notifies :create, 'ruby_block[block_until_operational]'
 end
 
 service 'jenkins' do
